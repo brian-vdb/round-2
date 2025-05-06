@@ -1,11 +1,9 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import Faq from './pages/Faq';
+import Index from './pages/Index';
+import type React from 'react';
 
-function Home() {
-  return <h1>Hello, World!</h1>;
-}
-
-export default function App() {
+const App: React.FC = () => {
   return (
     <div style={{ padding: '1rem' }}>
       <nav style={{ marginBottom: '1rem' }}>
@@ -13,9 +11,11 @@ export default function App() {
         <Link to="/faq">FAQ</Link>
       </nav>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Index />} />
         <Route path="/faq" element={<Faq />} />
       </Routes>
     </div>
   );
 }
+
+export default App;

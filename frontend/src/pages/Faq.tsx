@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import './Faq.css';
 
 // Data interface for FAQ items
 interface FAQItemData {
@@ -7,7 +8,7 @@ interface FAQItemData {
 }
 
 // Presentational component for a single FAQ item
-function FaqItem({ question, answer }: FAQItemData) {
+const FaqItem: React.FC<FAQItemData> = ({ question, answer }: FAQItemData) => {
   return (
     <div className='faq-item'>
       <h2 className='question'>{question}</h2>
@@ -16,7 +17,7 @@ function FaqItem({ question, answer }: FAQItemData) {
   );
 }
 
-export default function Faq() {
+const Faq: React.FC = () => {
   const [items, setItems] = useState<FAQItemData[]>([]);
 
   useEffect(() => {
@@ -43,3 +44,5 @@ export default function Faq() {
     </div>
   );
 }
+
+export default Faq;
