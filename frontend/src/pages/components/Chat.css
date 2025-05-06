@@ -1,0 +1,42 @@
+/* components/Chat.css */
+
+.chat {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 350px;
+  transform: translateY(calc(100% - 50px));
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+  font-family: sans-serif;
+  background: white;
+  border-top-left-radius: 10px;
+  overflow: hidden;
+}
+
+.chat.open {
+  transform: translateY(0);
+}
+
+.chat .header {
+  height: 50px;
+  background: #007bff;
+  color: white;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.chat .header .title {
+  margin: 0;
+  font-size: 16px;
+}
+
+.chat .content {
+  height: 480px;
+  padding: 16px;
+  overflow-y: auto;
+  background: #f9f9f9;
+}
