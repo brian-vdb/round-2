@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../../context/AuthContext'
 
 const Nav: React.FC = () => {
   const { user, signOut } = useAuth()

@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import Faq from './pages/Faq';
 import Index from './pages/Index';
 import Auth from './pages/Login';
-import Nav from './components/Nav';
+import Nav from './pages/components/Nav';
 
 const App: React.FC = () => {
   return (
