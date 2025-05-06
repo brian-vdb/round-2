@@ -1,3 +1,5 @@
+// Auth.tsx
+
 import { Routes, Route, Link } from 'react-router-dom';
 import Faq from './pages/Faq';
 import Index from './pages/Index';

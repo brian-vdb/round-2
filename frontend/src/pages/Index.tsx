@@ -1,3 +1,5 @@
+// pages/Index.tsx
+
 import type React from 'react';
 import './Index.css';
 import { useAuth } from '../context/AuthContext';
