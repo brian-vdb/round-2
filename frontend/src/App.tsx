@@ -1,6 +1,7 @@
 // App.tsx
 
 import type React from 'react';
+import './index.css';
 import { Routes, Route } from 'react-router-dom';
 import Faq from './pages/Faq';
 import Index from './pages/Index';

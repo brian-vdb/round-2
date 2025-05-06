@@ -17,14 +17,17 @@ const Nav: React.FC = () => {
 
   return (
     <nav className="nav">
-      <Link to="/">Home</Link> |{' '}
-      <Link to="/faq">FAQ</Link>
-      {!user && (
-        <> | <Link to="/login">Login</Link></>
-      )}
-      {user && (
-        <> | <a href="#" onClick={handleLogout}>Logout</a></>
-      )}
+      <div className="nav-center">
+        <Link to="/">Home</Link>
+        <Link to="/faq">FAQ</Link>
+      </div>
+      <div className="nav-right">
+        {!user ? (
+          <Link to="/login">Login</Link>
+        ) : (
+          <a href="#" onClick={handleLogout}>Logout</a>
+        )}
+      </div>
     </nav>
   )
 }
