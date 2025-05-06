@@ -13,8 +13,8 @@ const App: React.FC = () => {
       <Nav />
       <Routes>
         <Route path="/" element={<Index />} />
-        <Route path="/login" element={<Auth />} />
         <Route path="/faq" element={<Faq />} />
+        <Route path="/login" element={<Auth />} />
       </Routes>
     </div>
   );

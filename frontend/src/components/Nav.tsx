@@ -7,8 +7,8 @@ const Nav: React.FC = () => {
   return (
     <nav className="nav">
       <Link to="/">Home</Link> |{' '}
-      <Link to="/login">Login</Link> |{' '}
-      <Link to="/faq">FAQ</Link>
+      <Link to="/faq">FAQ</Link> |{' '}
+      <Link to="/login">Login</Link>
     </nav>
   );
 };
