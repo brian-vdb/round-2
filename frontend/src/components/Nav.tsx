@@ -1,11 +1,18 @@
 // components/Nav.tsx
 
-import type React from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 const Nav: React.FC = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    await signOut()
+    navigate('/')
+  }
 
   return (
     <nav className="nav">
@@ -14,8 +21,11 @@ const Nav: React.FC = () => {
       {!user && (
         <> | <Link to="/login">Login</Link></>
       )}
+      {user && (
+        <> | <a href="#" onClick={handleLogout}>Logout</a></>
+      )}
     </nav>
-  );
-};
+  )
+}
 
-export default Nav;
+export default Nav
