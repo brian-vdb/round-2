@@ -21,15 +21,22 @@
 .nav-center a {
   color: #333333;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 550;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
+  font-size: 16px;
   transition: background-color 0.2s ease, color 0.2s ease;
+  user-select: none;
 }
 
 .nav-center a:hover {
   background-color: #f0f4ff;
-  color: #0056b3;
+  color: #007bff;
+}
+
+.nav-center a:active {
+  background-color: #e3e6f3;
+  color: #005cbe;
 }
 
 .nav-right {
@@ -40,13 +47,19 @@
 .nav-right a {
   color: #333333;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 550;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   transition: background-color 0.2s ease, color 0.2s ease;
+  user-select: none;
 }
 
 .nav-right a:hover {
   background-color: #f0f4ff;
-  color: #0056b3;
+  color: #007bff;
+}
+
+.nav-right a:active {
+  background-color: #e3e6f3;
+  color: #005cbe;
 }

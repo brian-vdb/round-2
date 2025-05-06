@@ -18,12 +18,12 @@ const Nav: React.FC = () => {
   return (
     <nav className="nav">
       <div className="nav-center">
-        <Link to="/">Home</Link>
-        <Link to="/faq">FAQ</Link>
+        <Link to="/" draggable={false}>Home</Link>
+        <Link to="/faq" draggable={false}>FAQ</Link>
       </div>
       <div className="nav-right">
         {!user ? (
-          <Link to="/login">Login</Link>
+          <Link to="/login" draggable={false}>Login</Link>
         ) : (
           <a href="#" onClick={handleLogout}>Logout</a>
         )}
