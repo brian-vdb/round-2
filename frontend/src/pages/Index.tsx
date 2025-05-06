@@ -7,7 +7,7 @@ const Index: React.FC = () => {
   const { user } = useAuth();
   if (!user) {
     return (
-      <div style={{ padding: '1rem' }}>
+      <div>
         <h1>Please Login</h1>
         {/* Add login form here and call signIn */}
       </div>
