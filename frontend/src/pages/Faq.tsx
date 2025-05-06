@@ -32,7 +32,7 @@ const Faq: React.FC = () => {
   }, []);
 
   return (
-    <div className='page'>
+    <main className='faq-page'>
       <h1 className='title'>FAQ</h1>
       <div className='faq-form'>
         {items.map((item, index) => (
@@ -43,7 +43,7 @@ const Faq: React.FC = () => {
           />
         ))}
       </div>
-    </div>
+    </main>
   );
 }
 
