@@ -5,8 +5,8 @@ import type React from 'react';
 
 const App: React.FC = () => {
   return (
-    <div style={{ padding: '1rem' }}>
-      <nav style={{ marginBottom: '1rem' }}>
+    <div>
+      <nav>
         <Link to="/">Home</Link> |{' '}
         <Link to="/faq">FAQ</Link>
       </nav>
