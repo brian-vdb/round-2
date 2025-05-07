@@ -45,8 +45,8 @@ def _faq_search_tool(query: str, k: int = 5) -> list[dict[str, Any]]:
   results = [item.model_dump() for item in items]
   return results
 
-# Agent switch tool
-next_agent = {}
+# Switch to action agent tool
+next_agent: dict[str, str] = {}
 def _switch_to_action_agent(config: RunnableConfig) -> None:
   """Switch the current agent to the action_agent. Should be called when the user requests help with their account."""
   logger.info("Tool call: switch_to_action_agent()")
@@ -59,6 +59,7 @@ faq_tool = StructuredTool.from_function(
   _faq_search_tool,
   description="Search the FAQ database for relevant entries based on a query and return up to k results."
 )
+
 switch_tool = StructuredTool.from_function(
   _switch_to_action_agent,
   description="Switch the current agent to the action_agent. Should be called when the user requests help with their account."

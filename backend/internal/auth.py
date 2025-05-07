@@ -19,7 +19,6 @@ if not SECRET_KEY:
 
 ALGORITHM: str = "HS256"
 
-
 def create_access_token(user_payload: dict) -> str:
   """
   Create a signed JWT containing the minimal user payload.
