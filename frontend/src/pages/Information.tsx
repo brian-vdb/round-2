@@ -1,7 +1,7 @@
-// pages/Faq.tsx
+// pages/Information.tsx
 
 import React, { useState, useEffect } from 'react';
-import './Faq.css';
+import './Information.css';
 
 // Data interface for FAQ items
 interface FAQItemData {
@@ -32,7 +32,7 @@ const Faq: React.FC = () => {
   }, []);
 
   return (
-    <main className='page faq-page'>
+    <main className='page about-page'>
       <h1 className='title'>FAQ</h1>
       <div className='faq-form'>
         {items.map((item, index) => (

@@ -19,7 +19,7 @@ const Nav: React.FC = () => {
     <nav className="nav">
       <div className="nav-center">
         <Link to="/" draggable={false}>Home</Link>
-        <Link to="/faq" draggable={false}>FAQ</Link>
+        <Link to="/information" draggable={false}>Information</Link>
       </div>
       <div className="nav-right">
         {!user ? (

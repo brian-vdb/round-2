@@ -59,7 +59,7 @@ export function useChatWebSocket() {
           const data: Message = JSON.parse(event.data);
           if (data.identity !== identity) {
             setIdentity(data.identity);
-            addMessage({ identity: 'new-identity', message: `You are now chatting with the ${data.identity} agent` });
+            addMessage({ identity: 'new-identity', message: `You are now chatting with ${data.identity}` });
           }
           addMessage(data);
         } catch {
