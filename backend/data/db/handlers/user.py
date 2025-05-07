@@ -1,11 +1,11 @@
-# db/handlers/user.py
+# data/db/handlers/user.py
 
 from typing import Optional
 from passlib.context import CryptContext
 
-from db.setup import LocalSession
-from db.models.user import User
-from schemas.user import UserRead, UserCreate
+from data.db.setup import LocalSession
+from data.db.models.user import User
+from data.schemas.user import UserRead, UserCreate
 
 # Password‐hashing context
 pwd_context: CryptContext = CryptContext(

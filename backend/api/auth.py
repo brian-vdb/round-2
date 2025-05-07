@@ -4,9 +4,9 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from pydantic import BaseModel
 
 from internal.auth import create_access_token, get_current_user
-from db.handlers.user import login_user
-from db.models.user import User
-from schemas.user import UserRead
+from data.db.handlers.user import login_user
+from data.db.models.user import User
+from data.schemas.user import UserRead
 
 router = APIRouter()
 

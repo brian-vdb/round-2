@@ -13,9 +13,9 @@ from api.auth import router as auth_router
 from api.chat import router as chat_router
 from api.information import router as information_router
 
-from db.setup import init_db
-from db.handlers.user import get_user_by_email, create_user
-from schemas.user import UserCreate
+from data.db.setup import init_db
+from data.db.handlers.user import get_user_by_email, create_user
+from data.schemas.user import UserCreate
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

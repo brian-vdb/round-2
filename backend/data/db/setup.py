@@ -1,4 +1,4 @@
-# db/setup.py
+# data/db/setup.py
 
 import os
 from contextlib import contextmanager
@@ -37,7 +37,7 @@ def init_db() -> None:
   that they will be registered properly on the metadata.
   Then create all tables.
   """
-  import db.models.user
+  import data.db.models.user
   Base.metadata.create_all(bind=engine)
 
 

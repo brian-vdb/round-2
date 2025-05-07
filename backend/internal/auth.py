@@ -8,8 +8,8 @@ from jose import JWTError, jwt
 from fastapi import HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer
 
-from db.setup import LocalSession
-from db.models.user import User
+from data.db.setup import LocalSession
+from data.db.models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
