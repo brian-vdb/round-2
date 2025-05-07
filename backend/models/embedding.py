@@ -1,3 +1,5 @@
+# models/embedding.py
+
 from typing import List
 
 from models.client import get_openai_client
