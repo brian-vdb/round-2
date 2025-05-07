@@ -1,5 +1,6 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException, status
 from typing import Optional
+import asyncio
 
 from api.auth import User, get_current_user
 
@@ -31,10 +32,16 @@ async def websocket_chat(websocket: WebSocket):
     try:
         while True:
             # Receive user message
-            message = await websocket.receive_text()
-            
-            # Send the message back
-            await websocket.send_text(message)
+            user_msg = await websocket.receive_text()
+
+            # Simulate processing delay
+            await asyncio.sleep(1)
+
+            # Wrap and send
+            await websocket.send_json({
+                "identity": 'user_echo',
+                "message": user_msg
+            })
 
     except WebSocketDisconnect:
         # Handle client disconnection
