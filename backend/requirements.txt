@@ -6,3 +6,5 @@ SQLAlchemy
 passlib
 pydantic[email]
 argon2_cffi
+typesense
+openai
