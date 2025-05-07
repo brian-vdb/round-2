@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  typesense:
+    image: typesense/typesense:28.0
+    restart: on-failure
+    ports:
+      - '8108:8108'
+    volumes:
+      - ./typesense-data:/data
+    environment:
+      - TYPESENSE_API_KEY=${TYPESENSE_API_KEY}
+    command:
+      - "--api-key=${TYPESENSE_API_KEY}"
+      - "--data-dir=/data"
