@@ -11,6 +11,8 @@ load_dotenv()
 
 from api.auth import router as auth_router
 from api.chat import router as chat_router
+from api.information import router as information_router
+
 from db.setup import init_db
 from db.handlers.user import get_user_by_email, create_user
 from schemas.user import UserCreate
@@ -61,6 +63,8 @@ app.add_middleware(
 # Mount your auth routes
 app.include_router(auth_router, prefix="/auth")
 app.include_router(chat_router, prefix="/chat")
+app.include_router(information_router, prefix="/information")
+
 
 if __name__ == "__main__":
   import uvicorn

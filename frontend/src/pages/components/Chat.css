@@ -26,7 +26,7 @@
 
 .chat .header {
   height: 50px;
-  background: #007bff;
+  background: var(--accent);
   color: white;
   padding: 0 16px;
   display: flex;
@@ -40,6 +40,7 @@
   margin: 0;
   font-size: 16px;
   font-weight: 550;
+  color: white;
 }
 
 .chat .status-icon {
