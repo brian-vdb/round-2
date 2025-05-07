@@ -71,7 +71,7 @@ async def get_information() -> InformationPage:
   response_model=SearchResponse,
   summary="Search FAQs using vector similarity",
 )
-async def search_faqs(
+async def search_faqs_endpoint(
   q: str = Query(..., description="Query string to search FAQs"),
   k: int = Query(5, ge=1, le=20, description="Number of results to return")
 ) -> SearchResponse:
