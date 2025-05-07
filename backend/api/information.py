@@ -64,19 +64,3 @@ async def get_information() -> InformationPage:
   return InformationPage(
     faq=DEFAULT_FAQS
   )
-
-# Search FAQs via RAG
-@router.get(
-  "/faq/search",
-  response_model=SearchResponse,
-  summary="Search FAQs using vector similarity",
-)
-async def search_faqs_endpoint(
-  q: str = Query(..., description="Query string to search FAQs"),
-  k: int = Query(5, ge=1, le=20, description="Number of results to return")
-) -> SearchResponse:
-  """
-  Perform a vector search on FAQs and return top-k similar entries.
-  """
-  results_items = search_faqs(query=q, k=k)
-  return SearchResponse(results=[item.model_dump() for item in results_items])
