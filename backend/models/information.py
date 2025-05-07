@@ -85,15 +85,13 @@ information_model_tools = ToolNode(_tools)
 
 # LLM node
 def information_model(state: dict[str, Any], config: RunnableConfig) -> dict[str, Any]:
+  # Fetch the state information
   messages = state.get("messages", [])
-  responded = config['metadata']['responded']
-  if responded != '':
-    system_msg = _create_system_message(f"You are currently NOT allowed to switch to {responded} at the moment. They already tried to help the user.")
-  else:
-    system_msg = _create_system_message()
-  llm = ChatOpenAI(model=COMPLETION_MODEL, temperature=0).bind_tools(_tools)
+  agents_invoked = config['metadata']['agents_invoked']
+  additional_rules = f"You are currently NOT allowed to switch to {agents_invoked} at the moment. They already tried to help the user. Ask for clarifying questions instead."
+  system_msg = _create_system_message(additional_rules) if agents_invoked != '' else _create_system_message()
 
-  # Convert ToolMessage to FunctionMessage
+  # Prepare the message history
   prepared: list[Any] = []
   for msg in messages:
     if isinstance(msg, ToolMessage):
@@ -101,7 +99,8 @@ def information_model(state: dict[str, Any], config: RunnableConfig) -> dict[str
     else:
       prepared.append(msg)
 
-  # Generate a response
+  # Invoke the llm
+  llm = ChatOpenAI(model=COMPLETION_MODEL, temperature=0).bind_tools(_tools)
   response = llm.invoke([system_msg] + prepared)
   return {"messages": [response], "response": response.content}
 
@@ -129,9 +128,9 @@ class InformationAssistant:
   def invoke(
     self, 
     messages: list[BaseMessage], 
-    responded: str,
+    agents_invoked: list[str],
     user_prompt: Optional[str] = None
-  ) -> tuple[list[BaseMessage], str, str]:
+  ) -> dict[str, Any]:
     global next_agent
 
     # Set up the next agent state
@@ -146,7 +145,7 @@ class InformationAssistant:
     if user_prompt:
       convo.append(HumanMessage(content=user_prompt))
 
-    # Invoke the chatbot
+    # Invoke the graph
     init_state = {"messages": convo, "response": ""}
     final_state = self.app.invoke(
       init_state,
@@ -156,11 +155,15 @@ class InformationAssistant:
           "checkpoint_ns": "info", 
           "checkpoint_id": "0", 
           "next_agent_id": next_agent_id,
-          "responded": responded
+          "agents_invoked": f"[{', '.join(agents_invoked)}]" if len(agents_invoked) > 0 else ''
         },
         metadata={}
       )
     )
 
-    # Return the state and next agent to call
-    return final_state["messages"], final_state["response"], next_agent.pop(next_agent_id)
+    # Return the results
+    return {
+      "messages": final_state["messages"],
+      "response": final_state["response"],
+      "next_agent": next_agent.pop(next_agent_id)
+    }

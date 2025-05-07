@@ -39,35 +39,38 @@ async def websocket_chat(websocket: WebSocket):
     # Set up the two agents
     info_agent = InformationAssistant()
     action_agent = ActionAssistant()
-    messages = []
-    next_respondent = 'information_agent'
+    messages: list = []
+    next_agent = 'information_agent'
 
     while True:
       # Receive user message
-      user_msg = await websocket.receive_text()
-      responded = []
+      prompt = await websocket.receive_text()
+      agents_invoked: list[str] = []
 
       while True:
-        # Handle the chatbot
-        last_respondent = next_respondent
-        if next_respondent == 'information_agent':
-          messages, agent_msg, next_respondent = info_agent.invoke(
-            messages=messages, responded=', '.join(responded), user_prompt=user_msg
-          )        
-        else:
-          messages, agent_msg, next_respondent = action_agent.invoke(
-            messages=messages, responded=', '.join(responded), user_prompt=user_msg
-          )
-        responded.append(last_respondent)
+        # Invoke the agent
+        current_agent = next_agent
+        agent = info_agent if current_agent == 'information_agent' else action_agent
+        result = agent.invoke(
+          messages=messages,
+          agents_invoked=agents_invoked,
+          user_prompt=prompt
+        )
+        agents_invoked.append(current_agent)
+
+        # Parse the result
+        messages = result['messages']
+        response = result['response']
+        next_agent = result['next_agent']
 
         # Handle the result
-        if next_respondent == last_respondent:
+        if current_agent == next_agent:
           await websocket.send_json({
-            "identity": last_respondent,
-            "message": agent_msg
+            "identity": current_agent,
+            "message": response
           })
           break
-        elif next_respondent in responded:
+        elif next_agent in agents_invoked:
           break
         else:
           messages.pop()
