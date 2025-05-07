@@ -1,17 +1,20 @@
-/* components/Chat.css */
+/* pages/components/Chat.css */
 
 .chat {
   position: fixed;
   bottom: 0;
   right: 0;
   width: 350px;
-  transform: translateY(calc(100% - 50px));
   transition: transform 0.3s ease-in-out;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
   font-family: 'Inter', sans-serif;
   background: white;
   border-top-left-radius: 10px;
   overflow: hidden;
+}
+
+.chat.closed {
+  transform: translateY(calc(100% - 50px));
 }
 
 .chat.open {

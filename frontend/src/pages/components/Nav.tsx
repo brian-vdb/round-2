@@ -1,4 +1,4 @@
-// components/Nav.tsx
+// pages/components/Nav.tsx
 
 import React from 'react'
 import './Nav.css'
