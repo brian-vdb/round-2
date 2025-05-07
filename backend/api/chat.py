@@ -10,46 +10,49 @@ router = APIRouter()
 
 @router.websocket("/ws")
 async def websocket_chat(websocket: WebSocket):
-    """
-    WebSocket endpoint for real-time chat with the AI agent.
-    """
-    # Accept the WebSocket connection
-    await websocket.accept()
+  """
+  WebSocket endpoint for real-time chat with the AI agent.
+  """
+  # Accept the WebSocket connection
+  await websocket.accept()
 
-    # Attempt optional authentication
-    user: Optional[User] = None
-    token = websocket.query_params.get("token")
-    if token:
-        try:
-            user = get_current_user(token)
-        except HTTPException:
-            # Invalid token, proceed as anonymous
-            user = None
-
-    # Log connection
-    username = user.username if user else "anonymous"
-    print(f"{username} connected to chat")
-
-    # Main chat loop
+  # Attempt optional authentication
+  user: Optional[User] = None
+  raw_token = websocket.query_params.get("token")
+  if raw_token:
+    # Expect format "<AuthType> <Token>"
+    parts = raw_token.split(" ", 1)
+    token = parts[1] if len(parts) == 2 else parts[0]
     try:
-        while True:
-            # Receive user message
-            user_msg = await websocket.receive_text()
+      user = get_current_user(token)
+    except HTTPException:
+      # Invalid token, proceed as anonymous
+      user = None
 
-            # Simulate processing delay
-            await asyncio.sleep(1)
+  # Log connection
+  username = user.username if user else "anonymous"
+  print(f"{username} connected to chat")
 
-            # Wrap and send
-            await websocket.send_json({
-                "identity": 'user_echo',
-                "message": user_msg
-            })
+  # Main chat loop
+  try:
+    while True:
+      # Receive user message
+      user_msg = await websocket.receive_text()
 
-    except WebSocketDisconnect:
-        # Handle client disconnection
-        print(f"{username} disconnected from chat")
+      # Simulate processing delay
+      await asyncio.sleep(1)
 
-    except Exception as e:
-        # Unexpected error: notify client and close connection
-        await websocket.send_text(f"Error: {str(e)}")
-        await websocket.close(code=status.WS_1011_INTERNAL_ERROR)
+      # Wrap and send
+      await websocket.send_json({
+        "identity": 'user_echo',
+        "message": user_msg
+      })
+
+  except WebSocketDisconnect:
+    # Handle client disconnection
+    print(f"{username} disconnected from chat")
+
+  except Exception as e:
+    # Unexpected error: notify client and close connection
+    await websocket.send_text(f"Error: {str(e)}")
+    await websocket.close(code=status.WS_1011_INTERNAL_ERROR)

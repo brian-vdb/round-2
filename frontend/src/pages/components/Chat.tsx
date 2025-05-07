@@ -35,7 +35,7 @@ export function useChatWebSocket() {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       socketRef.current.send(text);
     } else {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       const params = token ? `?token=${encodeURIComponent(token)}` : '';
       const socket = new WebSocket(`${WS_URL}${params}`);
       socketRef.current = socket;
