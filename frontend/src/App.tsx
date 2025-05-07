@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import Faq from './pages/Information';
+import Information from './pages/Information';
 import Index from './pages/Index';
 import Auth from './pages/Login';
 import Nav from './pages/components/Nav';
@@ -17,7 +17,7 @@ const App: React.FC = () => {
 
       <Routes>
         <Route path="/" element={<Index />} />
-        <Route path="/information" element={<Faq />} />
+        <Route path="/information" element={<Information />} />
         <Route path="/login" element={<Auth />} />
       </Routes>
 

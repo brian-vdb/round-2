@@ -19,7 +19,7 @@ const FaqItem: React.FC<FAQItemData> = ({ question, answer }: FAQItemData) => {
   );
 }
 
-const Faq: React.FC = () => {
+const Information: React.FC = () => {
   const [items, setItems] = useState<FAQItemData[]>([]);
 
   useEffect(() => {
@@ -47,4 +47,4 @@ const Faq: React.FC = () => {
   );
 }
 
-export default Faq;
+export default Information;
