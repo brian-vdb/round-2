@@ -1,17 +1,16 @@
 # data/search/faq.py
 
 import os
-from openai import OpenAI
 from pydantic import BaseModel
 from typing import List
 from pymongo.operations import SearchIndexModel
 
+from models.embedding import embed_text, embed_texts
 from data.search.client import get_mongo_client
 
 class FaqItem(BaseModel):
   question: str
   answer: str
-
 
 def get_faqs_collection():
   """
@@ -21,34 +20,25 @@ def get_faqs_collection():
   db_name = os.getenv("MONGO_DB", "round-2")
   return client[db_name]["faqs"]
 
-
 def add_faq_entries_to_mongo(faq_items: List[FaqItem]):
   """
   Adds FAQ items to MongoDB 'faqs' collection with OpenAI-generated embedding vectors in bulk.
   """
   collection = get_faqs_collection()
-  client = OpenAI()
 
-  # Batch questions for embeddings API
   questions = [item.question for item in faq_items]
-  response = client.embeddings.create(
-    model="text-embedding-ada-002",
-    input=questions,
-    encoding_format="float"
-  )
+  vectors = embed_texts(questions)
 
-  # Build documents list
   docs = []
-  for item, embed_data in zip(faq_items, response.data):
+  for item, vec in zip(faq_items, vectors):
     docs.append({
       "question": item.question,
       "answer": item.answer,
-      "question_vector": embed_data.embedding
+      "question_vector": vec
     })
 
   if docs:
     collection.insert_many(docs, ordered=False)
-
 
 def create_search_index():
   """
@@ -75,7 +65,6 @@ def create_search_index():
     # index may already exist or fail silently
     pass
 
-
 def initialize_faqs_collection(default_items: List[FaqItem]) -> None:
   """
   Ensure the 'faqs' collection exists, is seeded, and has a vector search index.
@@ -86,18 +75,11 @@ def initialize_faqs_collection(default_items: List[FaqItem]) -> None:
     print(f"[faq.py]: Initialized faq vector database with {len(default_items)} items")
   create_search_index()
 
-def search_faqs(query: str, k: int = 5) -> list[FaqItem]:
+def search_faqs(query: str, k: int = 5) -> List[FaqItem]:
   """
   Runs a vectorSearch aggregation against Mongo.
   """
-  client = OpenAI()
-  
-  resp = client.embeddings.create(
-    model="text-embedding-ada-002",
-    input=query,
-    encoding_format="float"
-  )
-  q_vec = resp.data[0].embedding
+  q_vec = embed_text(query)
 
   collection = get_faqs_collection()
   pipeline = [
