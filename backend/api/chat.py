@@ -1,3 +1,5 @@
+# api/chat.py
+
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException, status
 from typing import Optional
 import asyncio
