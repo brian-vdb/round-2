@@ -1,3 +1,5 @@
+# data/search/faq.py
+
 import os
 from openai import OpenAI
 from pydantic import BaseModel
