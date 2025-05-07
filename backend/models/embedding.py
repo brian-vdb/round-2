@@ -1,7 +1,6 @@
-from openai import OpenAI
 from typing import List
 
-from backend.models.client import get_openai_client
+from models.client import get_openai_client
 
 def embed_text(text: str, model: str = "text-embedding-ada-002") -> List[float]:
   """
