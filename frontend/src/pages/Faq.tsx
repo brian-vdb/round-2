@@ -32,7 +32,7 @@ const Faq: React.FC = () => {
   }, []);
 
   return (
-    <main className='faq-page'>
+    <main className='page faq-page'>
       <h1 className='title'>FAQ</h1>
       <div className='faq-form'>
         {items.map((item, index) => (

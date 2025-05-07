@@ -30,7 +30,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <main className="login-page">
+    <main className="page login-page">
       <h1>Login</h1>
       <form onSubmit={handleSubmit} className="login-form">
         <div className="form-group">
