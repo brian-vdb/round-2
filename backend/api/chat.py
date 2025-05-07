@@ -47,12 +47,9 @@ async def websocket_chat(websocket: WebSocket):
       user_msg = await websocket.receive_text()
       responded = []
 
-      # Handle the user query
       while True:
+        # Handle the chatbot
         last_respondent = next_respondent
-        if last_respondent in responded:
-          break
-
         if next_respondent == 'information_agent':
           messages, agent_msg, next_respondent = info_agent.invoke(
             messages=messages, responded=', '.join(responded), user_prompt=user_msg
@@ -63,14 +60,14 @@ async def websocket_chat(websocket: WebSocket):
           )
         responded.append(last_respondent)
 
-        # Wrap and send
-        await websocket.send_json({
-          "identity": last_respondent,
-          "message": agent_msg
-        })
-        
-        # Break when the next agent didn't change
-        if last_respondent == next_respondent:
+        # Handle the result
+        if next_respondent == last_respondent:
+          await websocket.send_json({
+            "identity": last_respondent,
+            "message": agent_msg
+          })
+          break
+        elif next_respondent in responded:
           break
         else:
           messages.pop()

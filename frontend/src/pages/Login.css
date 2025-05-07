@@ -1,1 +1,72 @@
 /* pages/Login.css */
+
+.page.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 85vh;
+  padding: var(--spacing);
+}
+
+.login-page h1 {
+  text-align: center;
+  margin-bottom: calc(var(--spacing) * 2);
+  font-size: 2rem;
+}
+
+.login-form {
+  background: var(--card-bg);
+  padding: calc(var(--spacing) * 2);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px var(--shadow);
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing);
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  font-size: 1rem;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.btn:not(:disabled):hover {
+  background-color: var(--text-light);
+  color: var(--text);
+}
+
+.error-message {
+  margin-top: var(--spacing);
+  color: var(--error);
+  font-size: 0.9rem;
+  text-align: center;
+}

@@ -13,7 +13,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 50vh;
+  height: 600px;
 }
 
 .chat.closed {
@@ -133,17 +133,19 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
+  font-family: 'Inter', sans-serif;
 }
 
 .chat .input-form .send-button {
   margin-left: 8px;
   padding: 8px 12px;
-  background: #007bff;
+  background: var(--accent);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+  font-family: 'Inter', sans-serif;
 }
 
 .chat .input-form .send-button:disabled {
