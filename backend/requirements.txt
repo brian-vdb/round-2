@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+python-jose
+SQLAlchemy
+passlib
+pydantic[email]
+argon2_cffi
