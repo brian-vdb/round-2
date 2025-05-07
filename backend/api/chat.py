@@ -2,9 +2,10 @@
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException, status
 from typing import Optional
-import asyncio
 
 from api.auth import User, get_current_user
+from models.action import ActionAssistant
+from models.information import InformationAssistant
 
 router = APIRouter()
 
@@ -35,18 +36,44 @@ async def websocket_chat(websocket: WebSocket):
 
   # Main chat loop
   try:
+    # Set up the two agents
+    info_agent = InformationAssistant()
+    action_agent = ActionAssistant()
+    messages = []
+    next_respondent = 'information_agent'
+
     while True:
       # Receive user message
       user_msg = await websocket.receive_text()
+      responded = []
 
-      # Simulate processing delay
-      await asyncio.sleep(1)
+      # Handle the user query
+      while True:
+        last_respondent = next_respondent
+        if last_respondent in responded:
+          break
 
-      # Wrap and send
-      await websocket.send_json({
-        "identity": 'user_echo',
-        "message": user_msg
-      })
+        if next_respondent == 'information_agent':
+          messages, agent_msg, next_respondent = info_agent.invoke(
+            messages=messages, responded=', '.join(responded), user_prompt=user_msg
+          )        
+        else:
+          messages, agent_msg, next_respondent = action_agent.invoke(
+            messages=messages, responded=', '.join(responded), user_prompt=user_msg
+          )
+        responded.append(last_respondent)
+
+        # Wrap and send
+        await websocket.send_json({
+          "identity": last_respondent,
+          "message": agent_msg
+        })
+        
+        # Break when the next agent didn't change
+        if last_respondent == next_respondent:
+          break
+        else:
+          messages.pop()
 
   except WebSocketDisconnect:
     # Handle client disconnection

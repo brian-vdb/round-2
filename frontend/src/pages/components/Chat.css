@@ -79,7 +79,7 @@
 }
 
 .chat .message.user .text {
-  background: #dcf8c6;
+  background: #eaffda;
   padding: 8px 12px;
   border-radius: 16px 16px 0 16px;
   max-width: 70%;
@@ -89,15 +89,15 @@
   justify-content: flex-start;
 }
 
-.chat .message.information .text {
-  background: #acc7ff;
+.chat .message.information_agent .text {
+  background: #e0eaff;
   padding: 8px 12px;
   border-radius: 16px 16px 16px 0;
   max-width: 70%;
 }
 
-.chat .message.action .text {
-  background: #ffd0d0;
+.chat .message.action_agent .text {
+  background: #ffebdb;
   padding: 8px 12px;
   border-radius: 16px 16px 16px 0;
   max-width: 70%;

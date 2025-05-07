@@ -20,9 +20,16 @@ const WS_URL = 'ws://127.0.0.1:8000/chat/ws';
 export function useChatWebSocket() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [identity, setIdentity] = useState<string | null>(null);
+  const identityRef = useRef<string | null>(null);
+
   const socketRef = useRef<WebSocket | null>(null);
   const isAtBottomRef = useRef(true);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Keep the ref in sync
+  useEffect(() => {
+    identityRef.current = identity;
+  }, [identity]);
 
   // auto-scroll when messages change, only if user was at bottom
   useLayoutEffect(() => {
@@ -57,7 +64,7 @@ export function useChatWebSocket() {
       socket.onmessage = (event: MessageEvent) => {
         try {
           const data: Message = JSON.parse(event.data);
-          if (data.identity !== identity) {
+          if (data.identity !== identityRef.current) {
             setIdentity(data.identity);
             addMessage({ identity: 'new-identity', message: `You are now chatting with ${data.identity}` });
           }
@@ -75,7 +82,7 @@ export function useChatWebSocket() {
         console.error('WebSocket error', err);
       };
     }
-  }, [addMessage]);
+  }, [addMessage, setIdentity]);
 
   // Cleanup on unmount
   useEffect(() => {
