@@ -1,6 +1,6 @@
 // pages/components/Chat.tsx
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useRef, useEffect, useLayoutEffect } from "react";
 import type { FormEvent } from "react";
 import './Chat.css';
 
@@ -19,7 +19,17 @@ const WS_URL = 'ws://127.0.0.1:8000/chat/ws';
  */
 export function useChatWebSocket() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const socketRef = React.useRef<WebSocket | null>(null);
+  const [identity, setIdentity] = useState<string | null>(null);
+  const socketRef = useRef<WebSocket | null>(null);
+  const isAtBottomRef = useRef(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // auto-scroll when messages change, only if user was at bottom
+  useLayoutEffect(() => {
+    if (isAtBottomRef.current && containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   /**
    * Append a message to the local message list.
@@ -41,13 +51,16 @@ export function useChatWebSocket() {
       socketRef.current = socket;
 
       socket.onopen = () => {
-        console.log('WebSocket connected');
         socket.send(text);
       };
 
       socket.onmessage = (event: MessageEvent) => {
         try {
           const data: Message = JSON.parse(event.data);
+          if (data.identity !== identity) {
+            setIdentity(data.identity);
+            addMessage({ identity: 'new-identity', message: `You are now chatting with the ${data.identity} agent` });
+          }
           addMessage(data);
         } catch {
           console.error('Invalid message format');
@@ -55,7 +68,6 @@ export function useChatWebSocket() {
       };
 
       socket.onclose = () => {
-        console.log('WebSocket disconnected');
         socketRef.current = null;
       };
 
@@ -72,25 +84,41 @@ export function useChatWebSocket() {
     };
   }, []);
 
-  return { messages, addMessage, sendMessage };
+  /**
+   * Handle scroll events in the messages container.
+   */
+  const handleScroll = useCallback(() => {
+    if (!containerRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+    // within 20px of bottom => consider at bottom
+    isAtBottomRef.current = scrollHeight - scrollTop <= clientHeight + 20;
+  }, []);
+
+  return { messages, addMessage, sendMessage, containerRef, handleScroll };
 }
 
+/**
+ * Chat component with slide-up panel, message list, and input form.
+ */
 const Chat: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const { messages, addMessage, sendMessage } = useChatWebSocket();
+  const { messages, addMessage, sendMessage, containerRef, handleScroll } = useChatWebSocket();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const text = input.trim();
     if (!text) return;
 
-    // Append user message locally
     addMessage({ identity: 'user', message: text });
-
-    // Send to server
     sendMessage(text);
     setInput("");
+
+    if (containerRef.current) {
+      setTimeout(() => {
+        containerRef.current!.scrollTop = containerRef.current!.scrollHeight;
+      }, 0);
+    }
   };
 
   return (
@@ -100,12 +128,15 @@ const Chat: React.FC = () => {
         <div className="status-icon" />
       </div>
       <div className="content">
-        <div className="messages">
+        <div
+          className="messages"
+          ref={containerRef}
+          onScroll={handleScroll}
+        >
           {messages.map((msg, idx) => (
             <div
               key={idx}
-              className={`message ${msg.identity === 'user' ? 'from-user' : 'from-bot'}`}>
-              <span className="identity">{msg.identity}:</span>
+              className={`message ${msg.identity}`}>
               <span className="text">{msg.message}</span>
             </div>
           ))}
