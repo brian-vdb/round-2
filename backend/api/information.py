@@ -1,31 +1,18 @@
 # api/information.py
 
 from contextlib import asynccontextmanager
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from pydantic import BaseModel
 from typing import List
 
-@asynccontextmanager
-async def typesense_lifespan(app: APIRouter):
-  """
-  Lifespan for initializing Typesense collection when this router is mounted.
-  If the collection is new, insert all default FAQ items.
-  """
-
-  yield
-
-# Create router with lifespan context for Typesense init
-router = APIRouter(lifespan=typesense_lifespan)
+from data.search.faq import initialize_faqs_collection, search_faqs
 
 class FaqItem(BaseModel):
   question: str
   answer: str
 
-class InformationPage(BaseModel):
-  faq: List[FaqItem]
-
-# FAQ entries aligned with TCS Pace Port theme
-FAQ_ITEMS: List[FaqItem] = [
+# Default FAQ items
+DEFAULT_FAQS: List[FaqItem] = [
   FaqItem(question="What is the TCS Pace Port?", answer="TCS Pace Port is an open innovation ecosystem that connects startups, enterprises, and academic institutions to co-create and pilot new technologies at scale."),
   FaqItem(question="How does Pace Port support digital transformation?", answer="By providing access to cutting-edge labs, design thinking workshops, and a network of industry experts, Pace Port accelerates digital transformation journeys for clients across sectors."),
   FaqItem(question="What industries does Pace Port focus on?", answer="Pace Port focuses on a broad range of industries including banking, retail, manufacturing, healthcare, and telecommunications to drive industry-specific innovation."),
@@ -48,6 +35,23 @@ FAQ_ITEMS: List[FaqItem] = [
   FaqItem(question="What future trends is Pace Port focusing on?", answer="Pace Port is exploring quantum computing, extended reality (XR), decentralized finance (DeFi), and sustainable tech innovations for the next wave of digital disruption."),
 ]
 
+@asynccontextmanager
+async def mongo_lifespan(app: APIRouter):
+  """
+  Lifespan for initializing MongoDB collection when this router is mounted.
+  """
+  initialize_faqs_collection(DEFAULT_FAQS)
+  yield
+
+# Create router with lifespan context for Typesense init
+router = APIRouter(lifespan=mongo_lifespan)
+
+class InformationPage(BaseModel):
+  faq: List[FaqItem]
+  
+class SearchResponse(BaseModel):
+  results: List[FaqItem]
+
 @router.get(
   "/",
   response_model=InformationPage,
@@ -58,5 +62,21 @@ async def get_information() -> InformationPage:
   Retrieve the full information payload, including FAQs and other future sections.
   """
   return InformationPage(
-    faq=FAQ_ITEMS
+    faq=DEFAULT_FAQS
   )
+
+# Search FAQs via RAG
+@router.get(
+  "/faq/search",
+  response_model=SearchResponse,
+  summary="Search FAQs using vector similarity",
+)
+async def search_faqs(
+  q: str = Query(..., description="Query string to search FAQs"),
+  k: int = Query(5, ge=1, le=20, description="Number of results to return")
+) -> SearchResponse:
+  """
+  Perform a vector search on FAQs and return top-k similar entries.
+  """
+  results_items = search_faqs(query=q, k=k)
+  return SearchResponse(results=[item.model_dump() for item in results_items])
