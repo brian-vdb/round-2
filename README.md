@@ -1,22 +1,22 @@
-# Round 2
+## Round 2
 
 A brief description of your project.
 
 ## Table of Contents
 
 - [Round 2](#round-2)
-  - [Table of Contents](#table-of-contents)
-  - [About](#about)
-  - [Features](#features)
-  - [Architecture](#architecture)
-  - [Tech Stack](#tech-stack)
-    - [Frontend](#frontend)
-    - [Backend API](#backend-api)
-    - [Database](#database)
-    - [Authentication](#authentication)
-    - [AI Integration](#ai-integration)
-  - [Configuration](#configuration)
-  - [Usage](#usage)
+- [Table of Contents](#table-of-contents)
+- [About](#about)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+  - [Frontend](#frontend)
+  - [Backend API](#backend-api)
+  - [Database](#database)
+  - [Authentication](#authentication)
+  - [AI Integration](#ai-integration)
+- [Configuration](#configuration)
+- [Usage](#usage)
 
 ## About
 
@@ -71,9 +71,15 @@ This project is a full-stack web application that leverages modern technologies 
   * Stores embeddings for documents and queries.
   * Supports fast approximate nearest neighbor search.
 
+* **SQLAlchemy**:
+
+  * ORM for interacting with a relational database (e.g., PostgreSQL, MySQL).
+  * Stores and manages application data beyond vector embeddings.
+  * Enables complex queries and transactions in a SQL database.
+
 ### Authentication
 
-* **JWT (JSON Web Tokens)**: Stateless token-based authentication.
+* **JWT (JSON Web Tokens)**: Stateless token-based authentication through jose.
 * **Argon2**: Password hashing algorithm for secure storage of user credentials.
 
 ### AI Integration
