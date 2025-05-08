@@ -1,1 +1,22 @@
 /* index.css */
+
+:root {
+  --bg: #fafafa;
+  --text: #111;
+  --text-light: #555;
+  --accent: #000;
+  --spacing: 1rem;
+
+  /* FAQ-specific spacing */
+  --faq-gap: 1rem;
+  --faq-padding: 1rem;
+  --shadow-light: rgba(0, 0, 0, 0.04);
+  --shadow-heavy: rgba(0, 0, 0, 0.08);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+}
